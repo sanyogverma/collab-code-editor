@@ -1,0 +1,17 @@
+{
+  "name": "collab-code-editor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Collaborative code editor with an execution sandbox",
+  "scripts": {
+    "dev": "concurrently --kill-others-on-fail --names frontend,backend \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "npm --prefix backend run dev",
+    "build": "npm --prefix frontend run build && npm --prefix backend run check",
+    "test": "npm --prefix backend test",
+    "start:backend": "npm --prefix backend start"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.6"
+  }
+}
