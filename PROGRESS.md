@@ -64,12 +64,14 @@ Date last worked: 2026-10-19
 ## Next Exact Task
 
 Current phase: Phase 2
-Current task: 2.1 - Design the page layout
-Last completed task: 2.1 - Static workspace layout
+Current task: 2.2 - Monaco Editor integration
+Last completed task: 2.2 - Monaco Editor integration
 
-- [x] Static coding workspace layout renders locally.
-- [x] Header, file sidebar, code preview, output panel and participant panel are present.
-- [x] Frontend build and existing backend health test pass.
+- [x] Monaco Editor is integrated into the workspace.
+- [x] JavaScript syntax highlighting and line numbers work.
+- [x] Typing, selection, deletion and undo/redo work.
+- [x] Editor resizes within the existing workspace.
+- [x] Production build and backend tests pass.
 
 ## Decisions Made
 

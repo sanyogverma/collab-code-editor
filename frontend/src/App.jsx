@@ -1,7 +1,9 @@
 import './monacoSetup.js';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import './App.css';
 import CodeEditor, { INITIAL_CODE } from './components/CodeEditor.jsx';
+import WorkspaceState from './components/WorkspaceState.jsx';
+
 
 function App() {
     const [code, setCode] = useState(INITIAL_CODE);
@@ -11,6 +13,76 @@ function App() {
   const handleCodeChange = useCallback((nextValue) => {
     setCode(nextValue ?? '');
   }, []);
+    const [apiStatus, setApiStatus] = useState('checking');
+  const [healthCheckAttempt, setHealthCheckAttempt] = useState(0);
+
+  // These URL options preview the UI states until real room APIs exist.
+  const [workspacePreviewType] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const requestedState = params.get('workspaceState');
+
+    return ['no-room', 'loading', 'error'].includes(requestedState)
+      ? requestedState
+      : null;
+  });
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function checkBackend() {
+      setApiStatus('checking');
+
+      try {
+        const response = await fetch('/api/health', {
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Health check returned HTTP ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.status !== 'ok') {
+          throw new Error('The backend health check did not succeed.');
+        }
+
+        if (!controller.signal.aborted) {
+          setApiStatus('available');
+        }
+      } catch (error) {
+        if (
+          error.name !== 'AbortError' &&
+          !controller.signal.aborted
+        ) {
+          setApiStatus('unavailable');
+        }
+      }
+    }
+
+    checkBackend();
+
+    return () => {
+      controller.abort();
+    };
+  }, [healthCheckAttempt]);
+
+  const retryBackendCheck = useCallback(() => {
+    setHealthCheckAttempt((attempt) => attempt + 1);
+  }, []);
+
+  const returnToLocalPreview = useCallback(() => {
+    window.location.assign(window.location.pathname);
+  }, []);
+
+  if (workspacePreviewType) {
+    return (
+      <WorkspaceState
+        type={workspacePreviewType}
+        onExit={returnToLocalPreview}
+      />
+    );
+  }
   return (
     <div className="app-shell">
       {/* Top navigation */}
@@ -32,10 +104,21 @@ function App() {
         </div>
 
         <div className="topbar-actions">
-          <div className="connection-status">
-            <span className="status-dot" />
-            <span>Preview mode</span>
-          </div>
+          <div
+  className={`connection-status connection-status--${apiStatus}`}
+  role="status"
+  aria-live="polite"
+>
+  <span className={`status-dot status-dot--${apiStatus}`} />
+
+  <span>
+    {apiStatus === 'checking'
+      ? 'Checking backend…'
+      : apiStatus === 'available'
+        ? 'Backend available'
+        : 'Backend unavailable'}
+  </span>
+</div>
 
           <div className="topbar-divider" />
 
@@ -147,6 +230,27 @@ function App() {
               <span className="breadcrumb-divider">/</span>
               <span className="breadcrumb-current">main.js</span>
             </div>
+
+            {apiStatus === 'unavailable' && (
+  <div className="backend-warning" role="alert">
+    <div className="backend-warning-copy">
+      <strong>Backend unavailable</strong>
+
+      <span>
+        The API health check failed. Your local editor is still available,
+        but backend-dependent features may not work.
+      </span>
+    </div>
+
+    <button
+      type="button"
+      className="backend-retry-button"
+      onClick={retryBackendCheck}
+    >
+      Retry connection
+    </button>
+  </div>
+)}
 
             
             <div className="editor-preview-notice">
