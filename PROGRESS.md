@@ -63,13 +63,13 @@ Date last worked: 2026-10-19
 
 ## Next Exact Task
 
-- Phase: Phase 1
-- Task: 1.6
-- Expected result: README and PROGRESS reviewed, setup commands verified, and documentation committed.
+Current phase: Phase 2
+Current task: 2.1 - Design the page layout
+Last completed task: 2.1 - Static workspace layout
 
-Before starting Phase 2, verify that Phase 0's product scope and threat-model
-requirements are complete. If Phase 0 is already complete, the next roadmap
-task is Phase 2, Task 2.1: design the static editor interface.
+- [x] Static coding workspace layout renders locally.
+- [x] Header, file sidebar, code preview, output panel and participant panel are present.
+- [x] Frontend build and existing backend health test pass.
 
 ## Decisions Made
 
