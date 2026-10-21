@@ -1,4 +1,6 @@
+import './monacoSetup.js';
 import './App.css';
+import CodeEditor from './components/CodeEditor.jsx';
 
 function App() {
   return (
@@ -111,103 +113,14 @@ function App() {
               <span className="breadcrumb-current">main.js</span>
             </div>
 
+            
             <div className="editor-preview-notice">
-              <span className="notice-icon">i</span>
-              Static preview · Monaco Editor will be integrated in Task 2.2
+            <span className="notice-icon">i</span>
+             Local editing enabled · Changes are not yet saved or synchronized
             </div>
 
-            <div className="code-preview" aria-label="Static JavaScript code preview">
-              <div className="code-line">
-                <span className="line-number">1</span>
-                <span className="token-comment">
-                  // Welcome to your collaborative workspace
-                </span>
-              </div>
-
-              <div className="code-line">
-                <span className="line-number">2</span>
-                <span>
-                  <span className="token-keyword">const</span>{' '}
-                  <span className="token-variable">room</span> = {'{'}
-                </span>
-              </div>
-
-              <div className="code-line">
-                <span className="line-number">3</span>
-                <span>
-                  {'  '}name: <span className="token-string">"Collaborative Workspace"</span>,
-                </span>
-              </div>
-
-              <div className="code-line">
-                <span className="line-number">4</span>
-                <span>
-                  {'  '}language: <span className="token-string">"javascript"</span>,
-                </span>
-              </div>
-
-              <div className="code-line">
-                <span className="line-number">5</span>
-                <span>
-                  {'  '}status: <span className="token-string">"ready"</span>,
-                </span>
-              </div>
-
-              <div className="code-line">
-                <span className="line-number">6</span>
-                <span>{'};'}</span>
-              </div>
-
-              <div className="code-line">
-                <span className="line-number">7</span>
-                <span>&nbsp;</span>
-              </div>
-
-              <div className="code-line">
-                <span className="line-number">8</span>
-                <span>
-                  <span className="token-keyword">function</span>{' '}
-                  <span className="token-function">greet</span>(name) {'{'}
-                </span>
-              </div>
-
-              <div className="code-line">
-                <span className="line-number">9</span>
-                <span>
-                  {'  '}<span className="token-keyword">return</span>{' '}
-                  <span className="token-string">"Welcome, "</span> + name +
-                  <span className="token-string"> "!"</span>;
-                </span>
-              </div>
-
-              <div className="code-line">
-                <span className="line-number">10</span>
-                <span>{'}'}</span>
-              </div>
-
-              <div className="code-line">
-                <span className="line-number">11</span>
-                <span>&nbsp;</span>
-              </div>
-
-              <div className="code-line">
-                <span className="line-number">12</span>
-                <span>
-                  <span className="token-console">console</span>.log(
-                  <span className="token-function">greet</span>(
-                  <span className="token-string">"developer"</span>));
-                </span>
-              </div>
-
-              <div className="cursor-placeholder" />
-            </div>
-
-            <div className="editor-empty-space">
-              <span>⌘</span>
-              <p>Your coding workspace starts here.</p>
-              <small>
-                Editing and synchronization will be added in the next tasks.
-              </small>
+            <div className="monaco-editor-container">
+            <CodeEditor />
             </div>
           </section>
 
