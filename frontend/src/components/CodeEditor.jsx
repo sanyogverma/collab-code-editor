@@ -1,7 +1,7 @@
 import { useCallback, useRef } from 'react';
 import Editor from '@monaco-editor/react';
 
-const INITIAL_CODE = `// Welcome to your collaborative workspace
+export const INITIAL_CODE = `// Welcome to your collaborative workspace
 
 const room = {
   name: "Collaborative Workspace",
@@ -16,10 +16,9 @@ function greet(name) {
 console.log(greet("developer"));
 `;
 
-function CodeEditor() {
+function CodeEditor({ value, onChange, fontSize }) {
   const editorRef = useRef(null);
 
-  // Define the editor theme before Monaco creates the editor.
   const handleBeforeMount = useCallback((monaco) => {
     monaco.editor.defineTheme('collab-dark', {
       base: 'vs-dark',
@@ -59,7 +58,6 @@ function CodeEditor() {
     });
   }, []);
 
-  // Save the mounted editor instance without recreating it on each render.
   const handleEditorMount = useCallback((editor) => {
     editorRef.current = editor;
     editor.focus();
@@ -71,13 +69,14 @@ function CodeEditor() {
       width="100%"
       language="javascript"
       theme="collab-dark"
-      defaultValue={INITIAL_CODE}
+      value={value}
+      onChange={onChange}
       beforeMount={handleBeforeMount}
       onMount={handleEditorMount}
       options={{
         automaticLayout: true,
         fontFamily: "'Cascadia Code', 'Fira Code', Consolas, monospace",
-        fontSize: 13,
+        fontSize,
         lineNumbers: 'on',
         minimap: {
           enabled: false,

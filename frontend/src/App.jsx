@@ -1,8 +1,16 @@
 import './monacoSetup.js';
+import { useCallback, useState } from 'react';
 import './App.css';
-import CodeEditor from './components/CodeEditor.jsx';
+import CodeEditor, { INITIAL_CODE } from './components/CodeEditor.jsx';
 
 function App() {
+    const [code, setCode] = useState(INITIAL_CODE);
+  const [fontSize, setFontSize] = useState(13);
+  const [activeOutputTab, setActiveOutputTab] = useState('output');
+
+  const handleCodeChange = useCallback((nextValue) => {
+    setCode(nextValue ?? '');
+  }, []);
   return (
     <div className="app-shell">
       {/* Top navigation */}
@@ -101,9 +109,36 @@ function App() {
             </div>
 
             <div className="editor-tabbar-right">
-              <span className="language-label">JavaScript</span>
-              <span className="editor-menu">···</span>
-            </div>
+  <span className="language-label">JavaScript</span>
+
+  <div className="font-size-controls" aria-label="Editor font size controls">
+    <button
+      type="button"
+      className="font-size-button"
+      onClick={() => setFontSize((current) => Math.max(10, current - 1))}
+      disabled={fontSize <= 10}
+      aria-label="Decrease editor font size"
+      title="Decrease font size"
+    >
+      A−
+    </button>
+
+    <span className="font-size-value">{fontSize}px</span>
+
+    <button
+      type="button"
+      className="font-size-button"
+      onClick={() => setFontSize((current) => Math.min(24, current + 1))}
+      disabled={fontSize >= 24}
+      aria-label="Increase editor font size"
+      title="Increase font size"
+    >
+      A+
+    </button>
+  </div>
+
+  <span className="editor-menu">···</span>
+</div>
           </div>
 
           <section className="editor-pane">
@@ -120,30 +155,69 @@ function App() {
             </div>
 
             <div className="monaco-editor-container">
-            <CodeEditor />
-            </div>
+  <CodeEditor
+    value={code}
+    onChange={handleCodeChange}
+    fontSize={fontSize}
+  />
+</div>
           </section>
 
           {/* Bottom output panel */}
           <section className="output-panel">
             <div className="output-header">
               <div className="output-tabs">
-                <span className="output-tab active-output-tab">OUTPUT</span>
-                <span className="output-tab">PROBLEMS</span>
-              </div>
+  <button
+    type="button"
+    className={`output-tab ${
+      activeOutputTab === 'output' ? 'active-output-tab' : ''
+    }`}
+    aria-pressed={activeOutputTab === 'output'}
+    onClick={() => setActiveOutputTab('output')}
+  >
+    OUTPUT
+  </button>
+
+  <button
+    type="button"
+    className={`output-tab ${
+      activeOutputTab === 'problems' ? 'active-output-tab' : ''
+    }`}
+    aria-pressed={activeOutputTab === 'problems'}
+    onClick={() => setActiveOutputTab('problems')}
+  >
+    PROBLEMS
+  </button>
+</div>
 
               <span className="output-menu">···</span>
             </div>
 
             <div className="output-body">
-              <span className="output-prompt">›</span>
-              <div>
-                <p>No output yet</p>
-                <small>
-                  Execution results will appear here when the runner is implemented.
-                </small>
-              </div>
-            </div>
+  {activeOutputTab === 'output' ? (
+    <>
+      <span className="output-prompt">›</span>
+
+      <div>
+        <p>No output yet</p>
+        <small>
+          Execution results will appear here when the runner is implemented.
+        </small>
+      </div>
+    </>
+  ) : (
+    <>
+      <span className="output-prompt problem-prompt">i</span>
+
+      <div>
+        <p>No problems to display</p>
+        <small>
+          Editor diagnostics will appear here when they are connected to the workspace.
+        </small>
+      </div>
+    </>
+  )}
+</div>
           </section>
         </main>
 
@@ -200,10 +274,11 @@ function App() {
         </div>
 
         <div className="statusbar-right">
-          <span>JavaScript</span>
-          <span>UTF-8</span>
-          <span>Spaces: 2</span>
-        </div>
+  <span>JavaScript</span>
+  <span>{code.length} characters</span>
+  <span>UTF-8</span>
+  <span>Spaces: 2</span>
+</div>
       </footer>
     </div>
   );
