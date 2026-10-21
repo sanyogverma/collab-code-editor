@@ -16,8 +16,14 @@ function greet(name) {
 console.log(greet("developer"));
 `;
 
-function CodeEditor({ value, onChange, fontSize }) {
+function CodeEditor({
+  value,
+  onChange,
+  fontSize,
+  documentPath = 'inmemory://collab-code-editor/local-preview/main.js',
+}) {
   const editorRef = useRef(null);
+  const disposeListenerRef = useRef(null);
 
   const handleBeforeMount = useCallback((monaco) => {
     monaco.editor.defineTheme('collab-dark', {
@@ -60,11 +66,24 @@ function CodeEditor({ value, onChange, fontSize }) {
 
   const handleEditorMount = useCallback((editor) => {
     editorRef.current = editor;
-    editor.focus();
+
+    // Clear our reference when Monaco disposes this editor instance.
+    const disposeListener = editor.onDidDispose(() => {
+      if (editorRef.current === editor) {
+        editorRef.current = null;
+      }
+
+      if (disposeListenerRef.current === disposeListener) {
+        disposeListenerRef.current = null;
+      }
+    });
+
+    disposeListenerRef.current = disposeListener;
   }, []);
 
   return (
     <Editor
+      path={documentPath}
       height="100%"
       width="100%"
       language="javascript"
@@ -73,6 +92,13 @@ function CodeEditor({ value, onChange, fontSize }) {
       onChange={onChange}
       beforeMount={handleBeforeMount}
       onMount={handleEditorMount}
+      keepCurrentModel={false}
+      saveViewState={false}
+      loading={
+        <div className="monaco-loading" role="status">
+          Loading code editor…
+        </div>
+      }
       options={{
         automaticLayout: true,
         fontFamily: "'Cascadia Code', 'Fira Code', Consolas, monospace",

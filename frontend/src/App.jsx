@@ -4,6 +4,9 @@ import './App.css';
 import CodeEditor, { INITIAL_CODE } from './components/CodeEditor.jsx';
 import WorkspaceState from './components/WorkspaceState.jsx';
 
+const LOCAL_DOCUMENT_PATH =
+  'inmemory://collab-code-editor/local-preview/main.js';
+
 
 function App() {
     const [code, setCode] = useState(INITIAL_CODE);
@@ -260,10 +263,12 @@ function App() {
 
             <div className="monaco-editor-container">
   <CodeEditor
-    value={code}
-    onChange={handleCodeChange}
-    fontSize={fontSize}
-  />
+  key={LOCAL_DOCUMENT_PATH}
+  documentPath={LOCAL_DOCUMENT_PATH}
+  value={code}
+  onChange={handleCodeChange}
+  fontSize={fontSize}
+/>
 </div>
           </section>
 

@@ -64,14 +64,16 @@ Date last worked: 2026-10-19
 ## Next Exact Task
 
 Current phase: Phase 2
-Current task: 2.2 - Monaco Editor integration
-Last completed task: 2.2 - Monaco Editor integration
+Current task: 2.5 - Manage editor lifecycle
+Last completed task: 2.5 - Manage editor lifecycle
 
-- [x] Monaco Editor is integrated into the workspace.
-- [x] JavaScript syntax highlighting and line numbers work.
-- [x] Typing, selection, deletion and undo/redo work.
-- [x] Editor resizes within the existing workspace.
-- [x] Production build and backend tests pass.
+- [x] Monaco editor is tracked through a React ref.
+- [x] Editor reference is cleared when Monaco disposes the instance.
+- [x] Current document model is disposed on component unmount.
+- [x] Document identity uses a stable Monaco model path.
+- [x] Changing document identity causes the editor component to remount.
+- [x] Ordinary font-size and output-tab changes do not reset editor contents.
+- [x] Frontend build and backend tests pass.
 
 ## Decisions Made
 
