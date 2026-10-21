@@ -64,16 +64,17 @@ Date last worked: 2026-10-19
 ## Next Exact Task
 
 Current phase: Phase 2
-Current task: 2.5 - Manage editor lifecycle
-Last completed task: 2.5 - Manage editor lifecycle
+Current task: 2.6 - Responsive workspace
+Last completed task: 2.6 - Responsive workspace
 
-- [x] Monaco editor is tracked through a React ref.
-- [x] Editor reference is cleared when Monaco disposes the instance.
-- [x] Current document model is disposed on component unmount.
-- [x] Document identity uses a stable Monaco model path.
-- [x] Changing document identity causes the editor component to remount.
-- [x] Ordinary font-size and output-tab changes do not reset editor contents.
+- [x] Workspace adapts to desktop, tablet, and mobile widths.
+- [x] Monaco resizes when the browser viewport changes.
+- [x] Output panel can be opened and closed.
+- [x] Closing Output gives the editor additional vertical space.
+- [x] Editor content remains intact when resizing and toggling Output.
+- [x] Font-size controls remain usable at narrow widths.
 - [x] Frontend build and backend tests pass.
+- [x] Workspace screenshot saved for the README.
 
 ## Decisions Made
 

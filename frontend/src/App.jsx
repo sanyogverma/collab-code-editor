@@ -12,6 +12,7 @@ function App() {
     const [code, setCode] = useState(INITIAL_CODE);
   const [fontSize, setFontSize] = useState(13);
   const [activeOutputTab, setActiveOutputTab] = useState('output');
+  const [isOutputOpen, setIsOutputOpen] = useState(true);
 
   const handleCodeChange = useCallback((nextValue) => {
     setCode(nextValue ?? '');
@@ -162,13 +163,17 @@ function App() {
 
           <div className="file-tree">
             <div className="tree-indent">
-              <div className="folder-row">
+              <div className="folder-row" title="Source folder: src">
                 <span className="chevron">⌄</span>
                 <span className="folder-icon">▰</span>
                 src
               </div>
 
-              <div className="file-row active-file">
+              <div
+  className="file-row active-file"
+  title="main.js"
+  aria-label="File main.js"
+>
                 <span className="tree-spacer" />
                 <span className="js-icon">JS</span>
                 <span>main.js</span>
@@ -186,7 +191,11 @@ function App() {
         </aside>
 
         {/* Central editor and output area */}
-        <main className="editor-column">
+        <main
+  className={`editor-column ${
+    isOutputOpen ? '' : 'editor-column--output-closed'
+  }`}
+>
           <div className="editor-tabbar">
             <div className="editor-tab">
               <span className="js-icon">JS</span>
@@ -222,6 +231,23 @@ function App() {
       A+
     </button>
   </div>
+
+  <button
+  type="button"
+  className="output-toggle-button"
+  aria-expanded={isOutputOpen}
+  aria-controls="workspace-output-panel"
+  title={isOutputOpen ? 'Hide output panel' : 'Show output panel'}
+  onClick={() => setIsOutputOpen((open) => !open)}
+>
+  <span className="output-toggle-label">
+    {isOutputOpen ? 'Hide output' : 'Show output'}
+  </span>
+
+  <span aria-hidden="true">
+    {isOutputOpen ? '▾' : '▴'}
+  </span>
+</button>
 
   <span className="editor-menu">···</span>
 </div>
@@ -273,7 +299,11 @@ function App() {
           </section>
 
           {/* Bottom output panel */}
-          <section className="output-panel">
+          {isOutputOpen && (
+  <section
+    className="output-panel"
+    id="workspace-output-panel"
+  >
             <div className="output-header">
               <div className="output-tabs">
   <button
@@ -299,7 +329,15 @@ function App() {
   </button>
 </div>
 
-              <span className="output-menu">···</span>
+              <button
+  type="button"
+  className="output-close-button"
+  aria-label="Close output panel"
+  title="Close output panel"
+  onClick={() => setIsOutputOpen(false)}
+>
+  ×
+</button>
             </div>
 
             <div className="output-body">
@@ -327,7 +365,8 @@ function App() {
     </>
   )}
 </div>
-          </section>
+                    </section>
+        )}
         </main>
 
         {/* Participant panel */}
