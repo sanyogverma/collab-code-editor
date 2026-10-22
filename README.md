@@ -15,6 +15,21 @@ The repository foundation is complete.
 - Backend syntax check and automated health endpoint test.
 - Environment configuration template.
 
+## Room API — Current Status
+
+The initial room API is implemented locally.
+
+- `POST /api/guests` creates a temporary guest identity and session token.
+- `POST /api/rooms` creates a room for the authenticated guest.
+- `GET /api/rooms/:roomId` returns metadata to the room owner.
+
+See [`docs/API_CONTRACTS.md`](docs/API_CONTRACTS.md) for the request
+formats, responses and error codes.
+
+Rooms and sessions use in-memory storage at this stage. They are lost
+when the backend restarts. Room joining and membership-based access
+will be implemented in subsequent Phase 3 tasks.
+
 ### Planned for later phases
 - Coding workspace and Monaco Editor.
 - Rooms, access permissions, and collaborative editing with Yjs.
