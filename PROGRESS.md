@@ -63,18 +63,18 @@ Date last worked: 2026-10-19
 
 ## Next Exact Task
 
-Current phase: Phase 2
-Current task: 2.6 - Responsive workspace
-Last completed task: 2.6 - Responsive workspace
+Current phase: Phase 3
+Current task: 3.1 - Define room records
+Last completed task: 3.1 - Define room records
 
-- [x] Workspace adapts to desktop, tablet, and mobile widths.
-- [x] Monaco resizes when the browser viewport changes.
-- [x] Output panel can be opened and closed.
-- [x] Closing Output gives the editor additional vertical space.
-- [x] Editor content remains intact when resizing and toggling Output.
-- [x] Font-size controls remain usable at narrow widths.
-- [x] Frontend build and backend tests pass.
-- [x] Workspace screenshot saved for the README.
+- [x] Room record includes ID, title, owner identifier, creation time and status.
+- [x] Room IDs are generated using Node.js crypto.randomUUID().
+- [x] Room store supports retrieval and closing a room.
+- [x] Invalid title and owner identifier inputs are rejected.
+- [x] Unknown room IDs return null.
+- [x] Automated room-store tests pass.
+- [x] Backend checks and frontend build pass.
+- [x] Room model documented in docs/ROOM_MODEL.md.
 
 ## Decisions Made
 
