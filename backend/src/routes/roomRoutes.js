@@ -1,11 +1,18 @@
 import { Router } from 'express';
 
 import { requireGuest } from '../middleware/requireGuest.js';
+import { requireRoomPermission } from '../middleware/requireRoomPermission.js';
+
+import { addRoomMembership } from '../services/roomMembershipStore.js';
+
 import {
   createRoomRecord,
-  getRoomById,
-  ROOM_STATUS,
 } from '../services/roomStore.js';
+
+import {
+  ROOM_PERMISSIONS,
+  ROOM_ROLES,
+} from '../services/roomPermissions.js';
 
 const router = Router();
 
@@ -30,13 +37,15 @@ function validateRoomTitle(value) {
   }
 
   if (/[\u0000-\u001F\u007F]/u.test(title)) {
-    throw new TypeError('title must not contain control characters.');
+    throw new TypeError(
+      'title must not contain control characters.',
+    );
   }
 
   return title;
 }
 
-// Create a room for the authenticated guest.
+// Create a room and register its creator as the owner.
 router.post('/', requireGuest, (req, res) => {
   if (
     !req.body ||
@@ -59,6 +68,12 @@ router.post('/', requireGuest, (req, res) => {
       ownerId: req.guest.id,
     });
 
+    addRoomMembership({
+      roomId: room.id,
+      userId: req.guest.id,
+      role: ROOM_ROLES.OWNER,
+    });
+
     return res.status(201).json({ room });
   } catch (error) {
     if (error instanceof TypeError) {
@@ -79,23 +94,17 @@ router.post('/', requireGuest, (req, res) => {
   }
 });
 
-// Retrieve room metadata.
-// Until membership is implemented, only the owner may retrieve it.
-router.get('/:roomId', requireGuest, (req, res) => {
-  const room = getRoomById(req.params.roomId);
-
-  // Use the same response for missing rooms and rooms the guest
-  // is not permitted to access.
-  if (!room || room.ownerId !== req.guest.id) {
-    return res.status(404).json({
-      error: {
-        code: 'ROOM_NOT_FOUND',
-        message: 'Room not found.',
-      },
+// Retrieve metadata only if the authenticated guest is a room member
+// with the READ permission.
+router.get(
+  '/:roomId',
+  requireGuest,
+  requireRoomPermission(ROOM_PERMISSIONS.READ),
+  (req, res) => {
+    return res.status(200).json({
+      room: req.room,
     });
-  }
-
-  return res.status(200).json({ room });
-});
+  },
+);
 
 export default router;

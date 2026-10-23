@@ -64,17 +64,20 @@ Date last worked: 2026-10-19
 ## Next Exact Task
 
 Current phase: Phase 3
-Current task: 3.1 - Define room records
-Last completed task: 3.1 - Define room records
+Current task: 3.5 - Protect room endpoints
+Last completed task: 3.5 - Protect room endpoints (REST authorization)
 
-- [x] Room record includes ID, title, owner identifier, creation time and status.
-- [x] Room IDs are generated using Node.js crypto.randomUUID().
-- [x] Room store supports retrieval and closing a room.
-- [x] Invalid title and owner identifier inputs are rejected.
-- [x] Unknown room IDs return null.
-- [x] Automated room-store tests pass.
+- [x] Room membership is stored separately from room metadata.
+- [x] Room creation establishes owner membership.
+- [x] Authorization checks membership and requested permissions.
+- [x] Room metadata endpoint requires read permission.
+- [x] Missing membership does not reveal room metadata.
+- [x] Unknown roles and insufficient permissions are denied.
+- [x] Automated authorization and API tests pass.
 - [x] Backend checks and frontend build pass.
-- [x] Room model documented in docs/ROOM_MODEL.md.
+- [x] Authorization boundaries are documented.
+- [ ] WebSocket authorization integration — required before the Phase 4 collaboration service is exposed.
+- [ ] Protected edit/run endpoints — apply permission middleware when those endpoints are implemented.
 
 ## Decisions Made
 
