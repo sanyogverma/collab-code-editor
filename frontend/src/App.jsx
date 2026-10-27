@@ -3,6 +3,8 @@ import { useCallback, useEffect, useState } from 'react';
 import './App.css';
 import CodeEditor, { INITIAL_CODE } from './components/CodeEditor.jsx';
 import WorkspaceState from './components/WorkspaceState.jsx';
+import RoomAccessPanel from './components/RoomAccessPanel.jsx';
+
 
 const LOCAL_DOCUMENT_PATH =
   'inmemory://collab-code-editor/local-preview/main.js';
@@ -144,6 +146,7 @@ function App() {
 
       {/* Main workspace */}
       <div className="workspace-layout">
+        <RoomAccessPanel />
         {/* File sidebar */}
         <aside className="sidebar">
           <div className="sidebar-heading">
