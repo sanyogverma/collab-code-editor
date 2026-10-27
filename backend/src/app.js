@@ -1,7 +1,8 @@
 import express from 'express';
-
+import roomInviteRoutes from './routes/roomInviteRoutes.js';
 import guestRoutes from './routes/guestRoutes.js';
 import roomRoutes from './routes/roomRoutes.js';
+
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.get('/health', (_req, res) => {
 
 app.use('/api/guests', guestRoutes);
 app.use('/api/rooms', roomRoutes);
+app.use('/api/rooms/:roomId', roomInviteRoutes);
 
 // Consistent response for unknown API paths and methods.
 app.use('/api', (_req, res) => {
